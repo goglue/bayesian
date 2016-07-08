@@ -1,4 +1,5 @@
-# Naive Bayesian library for Go [![Build Status](https://travis-ci.org/goglue/bayesian.svg?branch=master)](https://travis-ci.org/goglue/bayesian) [![Coverage Status](https://coveralls.io/repos/github/goglue/bayesian/badge.svg?branch=master)](https://coveralls.io/github/goglue/bayesian?branch=master)
+# Naive Bayesian library for Go
+[![Build Status](https://travis-ci.org/goglue/bayesian.svg?branch=master)](https://travis-ci.org/goglue/bayesian) [![Coverage Status](https://coveralls.io/repos/github/goglue/bayesian/badge.svg?branch=master)](https://coveralls.io/github/goglue/bayesian?branch=master) [![GoDoc](https://godoc.org/github.com/goglue/bayesian?status.svg)](https://godoc.org/github.com/goglue/bayesian)
 
 - Install
 
