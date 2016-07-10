@@ -80,11 +80,11 @@ func (r *RamFrequencyStorage) IncrementBulkNodeFrequencies(cls string, node []st
 	if nil == r.storage[cls] {
 		return errClsNotExisted
 	}
-
-	for i := 0; i < len(node); i++ {
+	lenNodes := len(node)
+	for i := 0; i < lenNodes; i++ {
 		r.storage[cls].freq[node[i]] += 1
-		r.storage[cls].total += 1
 	}
+	r.storage[cls].total += uint(lenNodes)
 
 	return nil
 }

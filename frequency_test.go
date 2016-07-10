@@ -18,6 +18,18 @@ func TestRamClassStorage_AddClasses(t *testing.T) {
 	assert.NotEqual(t, nil, fs.storage[cls[1]])
 }
 
+// Testing the addition of classes functionality
+func TestRamClassStorage_AddClasses_Error(t *testing.T) {
+	// setup
+	cls := []string{"testClass1", "testClass1", "testClass2"}
+	fs := NewFrequencyStorage()
+	// execute
+	err := fs.AddClasses(cls)
+	// assert
+	assert.NotEmpty(t, err)
+	assert.Equal(t, errClsAlreadyExists, err)
+}
+
 // Testing the retrieving of the added classes functionality
 func TestRamClassStorage_Classes(t *testing.T) {
 	// setup
@@ -27,7 +39,9 @@ func TestRamClassStorage_Classes(t *testing.T) {
 	// execute
 	actualCls := fs.Classes()
 	// assert
-	assert.Equal(t, cls, actualCls)
+	assert.Contains(t, actualCls, cls[1])
+	assert.Contains(t, actualCls, cls[0])
+	assert.Equal(t, 2, len(actualCls))
 }
 
 // Testing the incrementing of a node within a classes functionality
@@ -37,17 +51,58 @@ func TestRamFrequencyStorage_IncrementNodeFrequency(t *testing.T) {
 	fs := NewFrequencyStorage()
 	fs.AddClasses(cls)
 	// execute
-	fs.IncrementNodeFrequency(cls[0], "testNode1Class1", 1)
-	fs.IncrementNodeFrequency(cls[0], "testNode2Class1", 1)
+	err1 := fs.IncrementNodeFrequency(cls[0], "testNode1Class1", 1)
+	err2 := fs.IncrementNodeFrequency(cls[0], "testNode2Class1", 1)
 	// assert
-
-	// appended nodes
+	assert.Empty(t, err1)
+	assert.Empty(t, err2)
 	assert.Equal(t, uint(1), fs.storage[cls[0]].freq["testNode1Class1"])
 	assert.Equal(t, uint(1), fs.storage[cls[0]].freq["testNode2Class1"])
-	// unusual cases
 	assert.Equal(t, uint(0), fs.storage[cls[0]].freq["testNode3Class1"])
-	// total
 	assert.Equal(t, uint(2), fs.storage[cls[0]].total)
+}
+
+// Testing the incrementing of a node within a classes functionality
+func TestRamFrequencyStorage_IncrementNodeFrequency_Error(t *testing.T) {
+	// setup
+	cls := []string{"testClass1", "testClass2"}
+	fs := NewFrequencyStorage()
+	fs.AddClasses(cls)
+	// execute
+	err := fs.IncrementNodeFrequency("errorClass", "testNode1Class1", 1)
+	// assert
+	assert.NotEmpty(t, err)
+	assert.Equal(t, errClsNotExisted, err)
+}
+
+// Testing the incrementing of a node within a classes functionality
+func TestRamFrequencyStorage_IncrementBulkNodeFrequency(t *testing.T) {
+	// setup
+	cls := []string{"testClass1", "testClass2"}
+	fs := NewFrequencyStorage()
+	fs.AddClasses(cls)
+	nodes := []string{"testNode1Class1", "testNode2Class1"}
+	// execute
+	fs.IncrementBulkNodeFrequencies(cls[0], nodes)
+	// assert
+	assert.Equal(t, uint(1), fs.storage[cls[0]].freq["testNode1Class1"])
+	assert.Equal(t, uint(1), fs.storage[cls[0]].freq["testNode2Class1"])
+	assert.Equal(t, uint(0), fs.storage[cls[0]].freq["testNode3Class1"])
+	assert.Equal(t, uint(2), fs.storage[cls[0]].total)
+}
+
+// Testing the incrementing of a node within a classes functionality
+func TestRamFrequencyStorage_IncrementBulkNodeFrequency_Error(t *testing.T) {
+	// setup
+	cls := []string{"testClass1", "testClass2"}
+	fs := NewFrequencyStorage()
+	fs.AddClasses(cls)
+	nodes := []string{"testNode1Class1", "testNode2Class1"}
+	// execute
+	err := fs.IncrementBulkNodeFrequencies("something", nodes)
+	// assert
+	assert.NotEmpty(t, err)
+	assert.Equal(t, errClsNotExisted, err)
 }
 
 // Testing retrieving node count functionality
