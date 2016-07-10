@@ -18,11 +18,8 @@ func TestClassifier_Probability(t *testing.T) {
 	classifier.Learn(clsLaptop, "ram")
 	classifier.Learn(clsLaptop, "hdd")
 	// - teach computers class
-	classifier.Learn(clsCom, "wifi")
-	classifier.Learn(clsCom, "monitor")
-	classifier.Learn(clsCom, "monitor")
-	classifier.Learn(clsCom, "ram")
-	classifier.Learn(clsCom, "hdd")
+	learn := []string{"wifi", "monitor", "monitor", "ram", "hdd"}
+	classifier.LearnBulk(clsCom, learn)
 	// execute
 	scores := classifier.Probability([]string{"wifi", "ram", "hdd"})
 	// assert
